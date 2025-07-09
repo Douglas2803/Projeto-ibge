@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cidades Brasileiras</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Cidades Brasileiras</h1>
+
+  <h2>Buscar Município</h2>
+  <input type="text" id="nome-municipio" placeholder="Nome do município">
+  <button onclick="buscarMunicipio()">Buscar</button>
+
+  <h2>População por Estado</h2>
+  <input type="text" id="uf-estado" placeholder="UF do estado">
+  <button onclick="buscarPopulacaoPorEstado()">Buscar</button>
+
+  <h2>Listar Capitais</h2>
+  <button onclick="listarCapitais()">Listar</button>
+
+  <h2>Municípios por População</h2>
+  <input type="number" id="populacao-acima" placeholder="População acima de">
+  <button onclick="listarPorPopulacaoAcima()">Listar</button>
+  <br>
+  <input type="number" id="populacao-min" placeholder="Mínimo">
+  <input type="number" id="populacao-max" placeholder="Máximo">
+  <button onclick="listarPorPopulacaoEntre()">Listar</button>
+
+  <h2>Outras Funções</h2>
+  <button onclick="listarEstadosCapitalNaoMaisPopulosa()">Estados onde a capital não é a mais populosa</button>
+  <button onclick="listarDezMaisPopulosasNaoCapitais()">10 mais populosas (não capitais)</button>
+
+  <hr>
+
+  <h2>Resultados</h2>
+  <pre id="resultado"></pre>
+
+  <script src="script.js"></script>
+</body>
+</html>
