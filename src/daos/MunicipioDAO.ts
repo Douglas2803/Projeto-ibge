@@ -4,26 +4,26 @@ import { Municipio } from '../models/Municipio';
 
 class MunicipioDAO {
   async findByNome(nome: string): Promise<Municipio | null> {
-    const [rows] = await pool.query<RowDataPacket[]>('SELECT * FROM municipios WHERE nome_municipio = ?', [nome]);
+    const [rows] = await pool.query<RowDataPacket[]>('SELECT * FROM municipios WHERE Nome_Municipio = ?', [nome]);
     return rows[0] as Municipio || null;
   }
 
   async getPopulacaoByEstado(estado: string): Promise<number | null> {
-    const [rows] = await pool.query<RowDataPacket[]>('SELECT SUM(populacao) as total FROM municipios WHERE estado = ?', [estado]);
+    const [rows] = await pool.query<RowDataPacket[]>('SELECT SUM(populacao) as total FROM municipios WHERE UF = ?', [estado]);
     return rows[0]?.total || null;
   }
 
   async listCapitais(): Promise<Municipio[]> {
-    const [rows] = await pool.query<RowDataPacket[]>('SELECT * FROM municipios WHERE capital = 1'); // Em MySQL, 1 para true
+    const [rows] = await pool.query<RowDataPacket[]>('SELECT * FROM municipios WHERE Capital_Estado = 1'); // Em MySQL, 1 para true
     return rows as Municipio[];
   }
 
   async listMunicipiosByPopulacao(min: number, max?: number): Promise<Municipio[]> {
     if (max) {
-      const [rows] = await pool.query<RowDataPacket[]>('SELECT * FROM municipios WHERE populacao BETWEEN ? AND ?', [min, max]);
+      const [rows] = await pool.query<RowDataPacket[]>('SELECT * FROM municipios WHERE Populacao BETWEEN ? AND ?', [min, max]);
       return rows as Municipio[];
     } else {
-      const [rows] = await pool.query<RowDataPacket[]>('SELECT * FROM municipios WHERE populacao > ?', [min]);
+      const [rows] = await pool.query<RowDataPacket[]>('SELECT * FROM municipios WHERE Populacao > ?', [min]);
       return rows as Municipio[];
     }
   }
@@ -31,27 +31,27 @@ class MunicipioDAO {
   async getEstadosOndeCapitalNaoEMaisPopulosa(): Promise<{ estado: string; cidade_mais_populosa: string; populacao: number }[]> {
     const query = `
       WITH CidadesMaisPopulosas AS (
-        SELECT estado, MAX(populacao) as max_populacao
+        SELECT UF, MAX(Populacao) as max_populacao
         FROM municipios
-        GROUP BY estado
+        GROUP BY UF
       ),
       Capitais AS (
-        SELECT estado, populacao
+        SELECT UF, Populacao
         FROM municipios
-        WHERE capital = true
+        WHERE Capital_Estado = 1
       )
-      SELECT m.estado, m.nome_municipio as cidade_mais_populosa, m.populacao
+      SELECT m.UF, m.nome_municipio as cidade_mais_populosa, m.Populacao
       FROM municipios m
-      JOIN CidadesMaisPopulosas cmp ON m.estado = cmp.estado AND m.populacao = cmp.max_populacao
-      LEFT JOIN Capitais c ON m.estado = c.estado
-      WHERE c.populacao IS NULL OR c.populacao < cmp.max_populacao;
+      JOIN CidadesMaisPopulosas cmp ON m.UF = cmp.UF AND m.Populacao = cmp.max_populacao
+      LEFT JOIN Capitais c ON m.UF = c.UF
+      WHERE c.Populacao IS NULL OR c.Populacao < cmp.max_populacao;
     `;
     const [rows] = await pool.query<RowDataPacket[]>(query);
     return rows as { estado: string; cidade_mais_populosa: string; populacao: number }[];
   }
 
   async getDezMunicipiosMaisPopulososNaoCapitais(): Promise<Municipio[]> {
-    const [rows] = await pool.query<RowDataPacket[]>('SELECT * FROM municipios WHERE capital = 0 ORDER BY populacao DESC LIMIT 10'); // Em MySQL, 0 para false
+    const [rows] = await pool.query<RowDataPacket[]>('SELECT * FROM municipios WHERE Capital_Estado = 0 ORDER BY Populacao DESC LIMIT 10'); // Em MySQL, 0 para false
     return rows as Municipio[];
   }
 }
