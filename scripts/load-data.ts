@@ -1,7 +1,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import pool from './src/database';
+import pool from '../src/database';
 
 async function loadData() {
   const filePath = path.join(__dirname, '../2022_IBGE-Municipios.csv');

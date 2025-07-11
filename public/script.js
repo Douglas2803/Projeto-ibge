@@ -1,49 +1,33 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const forms = {
+        'form-municipios': '/api/municipios',
+        'form-populacao-estado': '/api/estados/:uf/populacao',
+        'form-capitais': '/api/capitais',
+        'form-municipios-populacao': '/api/municipios/populacao',
+        'form-capital-nao-mais-populosa': '/api/estados/capital-nao-mais-populosa',
+        'form-dez-mais-populosos': '/api/municipios/mais-populosos-nao-capitais'
+    };
 
-const resultadoDiv = document.getElementById('resultado');
+    const resultsContainer = document.getElementById('json-result');
 
-async function buscarMunicipio() {
-  const nome = document.getElementById('nome-municipio').value;
-  const response = await fetch(`/api/municipios?nome=${nome}`);
-  const data = await response.json();
-  resultadoDiv.textContent = JSON.stringify(data, null, 2);
-}
+    for (const [formId, endpoint] of Object.entries(forms)) {
+        const form = document.getElementById(formId);
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            let url = endpoint;
 
-async function buscarPopulacaoPorEstado() {
-  const uf = document.getElementById('uf-estado').value;
-  const response = await fetch(`/api/estados/${uf}/populacao`);
-  const data = await response.json();
-  resultadoDiv.textContent = JSON.stringify(data, null, 2);
-}
+            if (formId === 'form-populacao-estado') {
+                const uf = document.getElementById('uf').value;
+                url = url.replace(':uf', uf);
+            }
 
-async function listarCapitais() {
-  const response = await fetch('/api/capitais');
-  const data = await response.json();
-  resultadoDiv.textContent = JSON.stringify(data, null, 2);
-}
-
-async function listarPorPopulacaoAcima() {
-  const populacao = document.getElementById('populacao-acima').value;
-  const response = await fetch(`/api/municipios/populacao?acima=${populacao}`);
-  const data = await response.json();
-  resultadoDiv.textContent = JSON.stringify(data, null, 2);
-}
-
-async function listarPorPopulacaoEntre() {
-  const min = document.getElementById('populacao-min').value;
-  const max = document.getElementById('populacao-max').value;
-  const response = await fetch(`/api/municipios/populacao?min=${min}&max=${max}`);
-  const data = await response.json();
-  resultadoDiv.textContent = JSON.stringify(data, null, 2);
-}
-
-async function listarEstadosCapitalNaoMaisPopulosa() {
-  const response = await fetch('/api/estados/capital-nao-mais-populosa');
-  const data = await response.json();
-  resultadoDiv.textContent = JSON.stringify(data, null, 2);
-}
-
-async function listarDezMaisPopulosasNaoCapitais() {
-  const response = await fetch('/api/municipios/mais-populosos-nao-capitais');
-  const data = await response.json();
-  resultadoDiv.textContent = JSON.stringify(data, null, 2);
-}
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                resultsContainer.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                resultsContainer.textContent = `Error: ${error.message}`;
+            }
+        });
+    }
+});

@@ -1,4 +1,3 @@
-
 import pool from '../database';
 import { RowDataPacket } from 'mysql2';
 import { Municipio } from '../models/Municipio';
