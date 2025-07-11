@@ -2,7 +2,11 @@
   "name": "cidades-brasileiras-app",
   "version": "1.0.0",
   "main": "index.js",
-    "scripts": {
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/seu-usuario/seu-repositorio.git"
+  },
+  "scripts": {
     "build": "tsc",
     "start": "node dist/server.js",
     "dev": "ts-node src/server.ts",
@@ -13,11 +17,11 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "express": "^5.1.0",
+    "express": "^4.17.1",
     "mysql2": "^3.14.1"
   },
   "devDependencies": {
-    "@types/express": "^5.0.3",
+    "@types/express": "^4.17.13",
     "@types/node": "^24.0.10",
     "@types/pg": "^8.15.4",
     "ts-node": "^10.9.2",
