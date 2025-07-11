@@ -36,6 +36,12 @@
         <div class="endpoint">
             <h2>Listar Municípios por População</h2>
             <form id="form-municipios-populacao">
+                <label><input type="radio" name="populacao-filter" value="acima" checked> Acima de:</label>
+                <input type="number" id="populacao-acima" placeholder="População mínima">
+                <br>
+                <label><input type="radio" name="populacao-filter" value="entre"> Entre:</label>
+                <input type="number" id="populacao-min" placeholder="População mínima">
+                <input type="number" id="populacao-max" placeholder="População máxima">
                 <button type="submit">Buscar</button>
             </form>
         </div>

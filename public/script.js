@@ -19,15 +19,33 @@ document.addEventListener("DOMContentLoaded", () => {
       if (formId === "form-municipios") {
         const nome = document.getElementById("nome-municipio").value;
         url = `${endpoint}?nome=${nome}`;
-      } else if (formId === "form-populacao-estado") {
-        const uf = document.getElementById("uf").value;
-        url = url.replace(":uf", uf);
+      } else if (formId === "form-municipios-populacao") {
+        const filterType = document.querySelector('input[name="populacao-filter"]:checked').value;
+        if (filterType === "acima") {
+          const acima = document.getElementById("populacao-acima").value;
+          if (acima) url = `${endpoint}?acima=${acima}`;
+        } else if (filterType === "entre") {
+          const min = document.getElementById("populacao-min").value;
+          const max = document.getElementById("populacao-max").value;
+          if (min && max) url = `${endpoint}?min=${min}&max=${max}`;
+        }
       }
 
       try {
         const response = await fetch(url);
         const data = await response.json();
-        resultsContainer.textContent = JSON.stringify(data, null, 2);
+        if (formId === "form-municipios-populacao" && data.municipios && data.quantidade !== undefined) {
+          let display = `Quantidade de municípios encontrados: ${data.quantidade}
+
+`;
+          data.municipios.forEach(m => {
+            display += `Nome: ${m.nome_municipio}, Estado: ${m.estado}, População: ${m.populacao}
+`;
+          });
+          resultsContainer.textContent = display;
+        } else {
+          resultsContainer.textContent = JSON.stringify(data, null, 2);
+        }
       } catch (error) {
         resultsContainer.textContent = `Error: ${error.message}`;
       }

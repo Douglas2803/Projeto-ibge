@@ -22,12 +22,12 @@ class MunicipioController {
   listMunicipiosByPopulacao = async (req: Request, res: Response) => {
     const { acima, min, max } = req.query;
     if (acima) {
-      const municipios = await MunicipioService.listMunicipiosByPopulacao(Number(acima));
-      return res.json(municipios);
+      const result = await MunicipioService.listMunicipiosByPopulacao(Number(acima));
+      return res.json(result);
     }
     if (min && max) {
-      const municipios = await MunicipioService.listMunicipiosByPopulacao(Number(min), Number(max));
-      return res.json(municipios);
+      const result = await MunicipioService.listMunicipiosByPopulacao(Number(min), Number(max));
+      return res.json(result);
     }
     res.status(400).json({ error: 'Parâmetros inválidos' });
   }

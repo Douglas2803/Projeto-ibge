@@ -14,8 +14,17 @@ class MunicipioService {
     return MunicipioRepository.listCapitais();
   }
 
-  listMunicipiosByPopulacao(min: number, max?: number) {
-    return MunicipioRepository.listMunicipiosByPopulacao(min, max);
+  async listMunicipiosByPopulacao(min: number, max?: number) {
+    const municipios = await MunicipioRepository.listMunicipiosByPopulacao(min, max);
+    const formattedMunicipios = municipios.map(m => ({
+      nome_municipio: m.nome_municipio,
+      estado: m.estado,
+      populacao: m.populacao
+    }));
+    return {
+      quantidade: formattedMunicipios.length,
+      municipios: formattedMunicipios
+    };
   }
 
   getEstadosOndeCapitalNaoEMaisPopulosa() {
