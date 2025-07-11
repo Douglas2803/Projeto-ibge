@@ -19,6 +19,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (formId === "form-municipios") {
         const nome = document.getElementById("nome-municipio").value;
         url = `${endpoint}?nome=${nome}`;
+      } else if (formId === "form-populacao-estado") {
+        const uf = document.getElementById("uf").value;
+        if (uf) url = `/api/estados/${uf}/populacao`;
       } else if (formId === "form-municipios-populacao") {
         const filterType = document.querySelector('input[name="populacao-filter"]:checked').value;
         if (filterType === "acima") {
@@ -30,6 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
           if (min && max) url = `${endpoint}?min=${min}&max=${max}`;
         }
       }
+
 
       try {
         const response = await fetch(url);

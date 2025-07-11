@@ -20,10 +20,10 @@ class MunicipioDAO {
 
   async listMunicipiosByPopulacao(min: number, max?: number): Promise<Municipio[]> {
     if (max) {
-      const [rows] = await pool.query<RowDataPacket[]>('SELECT id, UF AS estado, codigo_estado, codigo_municipio, Nome_Municipio AS nome_municipio, Capital_Estado AS capital, Populacao AS populacao FROM municipios WHERE Populacao BETWEEN ? AND ?', [min, max]);
+      const [rows] = await pool.query<RowDataPacket[]>('SELECT id, UF AS estado, Cod_UF, Cod_Municipio, Nome_Municipio AS nome_municipio, Capital_Estado AS capital, Populacao AS populacao FROM municipios WHERE Populacao BETWEEN ? AND ?', [min, max]);
       return rows as Municipio[];
     } else {
-      const [rows] = await pool.query<RowDataPacket[]>('SELECT id, UF AS estado, codigo_estado, codigo_municipio, Nome_Municipio AS nome_municipio, Capital_Estado AS capital, Populacao AS populacao FROM municipios WHERE Populacao > ?', [min]);
+      const [rows] = await pool.query<RowDataPacket[]>('SELECT id, UF AS estado, Cod_UF, Cod_Municipio, Nome_Municipio AS nome_municipio, Capital_Estado AS capital, Populacao AS populacao FROM municipios WHERE Populacao > ?', [min]);
       return rows as Municipio[];
     }
   }
